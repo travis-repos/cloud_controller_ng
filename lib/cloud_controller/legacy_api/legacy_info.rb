@@ -108,15 +108,13 @@ module VCAP::CloudController
 
     # this is a direct port of the legacy cc info.
     def legacy_framework_info
-      frameworks_info = {}
-      Models::Framework.each do |framework|
-        frameworks_info[framework.name] = {
-          :name => framework.name,
+      { "buildpack" =>
+        {
+          :name => "buildpack",
           :runtimes => [runtime_info],
-          :detection => framework.internal_info["detection"],
+          :detection => "*",
         }
-      end
-      frameworks_info
+      }
     end
 
     def runtime_info_encoded

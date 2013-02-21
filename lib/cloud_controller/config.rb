@@ -42,8 +42,7 @@ class VCAP::CloudController::Config < VCAP::Config
 
       optional(:directories) => {
         optional(:tmpdir)    => String,
-        optional(:droplets)  => String,
-        optional(:staging_manifests) => String,
+        optional(:droplets)  => String
       },
 
       :db => {
@@ -128,18 +127,6 @@ class VCAP::CloudController::Config < VCAP::Config
         }
       }
     }
-  end
-
-  def self.from_file(file_name)
-    config = super(file_name)
-    merge_defaults(config)
-  end
-
-  def self.merge_defaults(config)
-    config[:directories] ||= {}
-    config[:directories][:staging_manifests] ||=
-      File.join(config_dir, "frameworks")
-    config
   end
 
   def self.configure(config)

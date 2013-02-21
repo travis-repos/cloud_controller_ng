@@ -46,10 +46,6 @@ module VCAP::CloudController::Errors
     ["ServiceInstancePaidQuotaExceeded",    HTTP::BAD_REQUEST, 60006, "You have exceeded your organization's services limit. Please file a support ticket to request additional resources."],
     ["ServiceInstanceServicePlanNotAllowed",    HTTP::BAD_REQUEST, 60007, "The service instance cannot be created because paid service plans are not allowed."],
 
-    ["FrameworkInvalid",   HTTP::BAD_REQUEST, 80001, "The framework is invalid: %s"],
-    ["FrameworkNameTaken", HTTP::BAD_REQUEST, 80002, "The framework name is taken: %s"],
-    ["FrameworkNotFound",  HTTP::NOT_FOUND,   80003, "The framework could not be found: %s"],
-
     ["ServiceBindingInvalid",            HTTP::BAD_REQUEST, 90001, "The service binding is invalid: %s"],
     ["ServiceBindingDifferentSpaces",    HTTP::BAD_REQUEST, 90002, "The app and the service are not in the same app space: %s"],
     ["ServiceBindingAppServiceTaken",    HTTP::BAD_REQUEST, 90003, "The app space binding to service is taken: %s"],

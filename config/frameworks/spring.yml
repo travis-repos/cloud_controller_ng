@@ -1,6 +1,0 @@
----
-name: "spring"
-detection:
-  - "*.war": true # TODO - this thinks everything with an XML file is Spring
-
-# vim: filetype=yaml

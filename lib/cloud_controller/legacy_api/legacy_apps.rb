@@ -130,7 +130,7 @@ module VCAP::CloudController
       {
         :name => app.name,
         :staging => {
-          :model => app.framework.name,
+          :model => "buildpack",
           :stack => "buildpack",
         },
         :uris => app.uris,
@@ -215,13 +215,6 @@ module VCAP::CloudController
       end
 
       if (staging = hash["staging"])
-        framework = nil
-        if (framework_name = staging["framework"] || staging["model"])
-          framework = Models::Framework.find(:name => framework_name)
-          raise FrameworkInvalid.new(framework_name) unless framework
-          req[:framework_guid] = framework.guid
-        end
-
         req[:command] = staging["command"] if staging["command"]
       end
 

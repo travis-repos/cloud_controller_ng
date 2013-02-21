@@ -102,7 +102,6 @@ module VCAP::CloudController
       config = @config.dup
 
       if run_migrations
-        populate_framework
         VCAP::CloudController::Models::QuotaDefinition.populate_from_config(config)
       end
 
@@ -163,13 +162,6 @@ module VCAP::CloudController
       c = services[pg_key].first["credentials"]
       @config[:db][:database] = "postgres://#{c["user"]}:#{c["password"]}@#{c["hostname"]}:#{c["port"]}/#{c["name"]}"
       @config[:port] = ENV["VCAP_APP_PORT"].to_i
-    end
-
-    # This isn't exactly the best place for this, but it is also temporary.  A
-    # seperate utility will get written for this
-    def populate_framework
-      fw_dir = @config[:directories][:staging_manifests]
-      Models::Framework.populate_from_directory fw_dir
     end
   end
 end

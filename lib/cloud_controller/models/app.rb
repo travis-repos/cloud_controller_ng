@@ -11,7 +11,6 @@ module VCAP::CloudController
       class InvalidBindingRelation < InvalidRelation; end
 
       many_to_one       :space
-      many_to_one       :framework
       many_to_many      :routes,
                         :before_add => :validate_route,
                         :after_add => :mark_routes_changed,
@@ -24,12 +23,12 @@ module VCAP::CloudController
       default_order_by  :name
 
       export_attributes :name, :production,
-                        :space_guid, :framework_guid, :buildpack,
+                        :space_guid, :buildpack,
                         :environment_json, :memory, :instances,
                         :disk_quota, :state, :version, :command, :console, :debug
 
       import_attributes :name, :production,
-                        :space_guid, :framework_guid, :buildpack,
+                        :space_guid, :buildpack,
                         :environment_json, :memory, :instances,
                         :disk_quota, :state,
                         :command, :console, :debug,
@@ -60,7 +59,6 @@ module VCAP::CloudController
         # here
         validates_presence :name
         validates_presence :space
-        validates_presence :framework
         validates_git_url :buildpack
         validates_unique   [:space_id, :name]
         validates_includes PackageStates, :package_state, :allow_missing => true

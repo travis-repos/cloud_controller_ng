@@ -309,7 +309,6 @@ module VCAP::CloudController
           :droplet => app.guid,
           :name => app.name,
           :uris => app.uris,
-          :framework => app.framework.name,
           :prod => app.production,
           :sha1 => app.droplet_hash,
           :executableFile => "deprecated",

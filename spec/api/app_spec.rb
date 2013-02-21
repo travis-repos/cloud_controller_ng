@@ -9,14 +9,11 @@ module VCAP::CloudController
     it_behaves_like "a CloudController API", {
       :path                => "/v2/apps",
       :model               => Models::App,
-      :basic_attributes    => [:name, :space_guid, :framework_guid],
-      :required_attributes => [:name, :space_guid, :framework_guid],
+      :basic_attributes    => [:name, :space_guid],
+      :required_attributes => [:name, :space_guid],
       :unique_attributes   => [:name, :space_guid],
       :queryable_attributes => :name,
-      :many_to_one_collection_ids => {
-        :space      => lambda { |app| Models::Space.make  },
-        :framework  => lambda { |app| Models::Framework.make }
-      },
+      :many_to_one_collection_ids => { :space => lambda { |app| Models::Space.make  } },
       :many_to_many_collection_ids => {
         :routes => lambda { |app|
           domain = Models::Domain.make(
@@ -237,8 +234,7 @@ module VCAP::CloudController
       let(:creation_req_for_a) do
         Yajl::Encoder.encode(
           :name => Sham.name,
-          :space_guid => @space_a.guid,
-          :framework_guid => Models::Framework.make.guid)
+          :space_guid => @space_a.guid)
       end
 
       let(:update_req_for_a) do
@@ -355,10 +351,7 @@ module VCAP::CloudController
         it "should enforce quota check on memory" do
           org = Models::Organization.make(:quota_definition => quota)
           space = Models::Space.make(:organization => org)
-          req = Yajl::Encoder.encode(:name => Sham.name,
-                                     :space_guid => space.guid,
-                                     :memory => 128,
-                                     :framework_guid => Models::Framework.make.guid)
+          req = Yajl::Encoder.encode(:name => Sham.name, :space_guid => space.guid, :memory => 128)
 
           post("/v2/apps", req, headers_for(make_developer_for_space(space)))
 
