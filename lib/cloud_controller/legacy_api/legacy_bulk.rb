@@ -96,7 +96,7 @@ module VCAP::CloudController
         end
         hash["id"] = app.guid
         hash["updated_at"] = app.updated_at || app.created_at
-        hash["runtime"] = app.runtime.name
+        hash["runtime"] = "buildpack"
         hash["framework"] = app.framework.name
         apps[app.guid] = hash
         id_for_next_token = app.id

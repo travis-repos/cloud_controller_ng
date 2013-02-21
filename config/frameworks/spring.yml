@@ -1,8 +1,5 @@
 ---
 name: "spring"
-runtimes:
-  - "java":
-      default: true
 detection:
   - "*.war": true # TODO - this thinks everything with an XML file is Spring
 

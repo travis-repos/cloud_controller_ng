@@ -185,8 +185,6 @@ module VCAP::CloudController
       it "includes misc app properties" do
         AppStager.staging_request(@app).tap do |r|
           r[:properties][:meta].should be_kind_of(Hash)
-          r[:properties][:runtime_info].should be_kind_of(Hash)
-          r[:properties][:runtime_info].should have_key(:name)
           r[:properties][:framework_info].should be_kind_of(Hash)
         end
       end

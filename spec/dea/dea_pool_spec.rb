@@ -50,27 +50,10 @@ module VCAP::CloudController
         }
       end
 
-      let(:dea_mem_only) do
+      let(:dea_low_mem) do
         {
           :id => "mem_only",
-          :available_memory => 1024,
-          :runtimes => %w[ruby18 java]
-        }
-      end
-
-      let(:dea_runtime_only) do
-        {
-          :id => "runtime_only",
           :available_memory => 512,
-          :runtimes => %w[ruby18 java ruby19]
-        }
-      end
-
-      let(:dea_all) do
-        {
-          :id => "all",
-          :available_memory => 1024,
-          :runtimes => %w[ruby18 java ruby19]
         }
       end
 
@@ -81,35 +64,17 @@ module VCAP::CloudController
         }
       end
 
-      context "when the dea has runtimes" do
-        let(:deas) { deas = DeaPool.send(:deas) }
+      let(:deas) { deas = DeaPool.send(:deas) }
 
-        before do
-          DeaPool.send(:process_advertise_message, dea_expired)
-          DeaPool.send(:process_advertise_message, dea_mem_only)
-          DeaPool.send(:process_advertise_message, dea_runtime_only)
-          DeaPool.send(:process_advertise_message, dea_all)
-          deas["expired"][:last_update] = Time.new(2011, 04, 11)
-        end
-
-        it "should find a non-expired dea meeting the needs of the app" do
-          DeaPool.find_dea(1024, "ruby19").should == "all"
-        end
-
-        it "should remove expired dea entries" do
-          expect {
-            DeaPool.find_dea(4096, "cobol").should be_nil
-          }.to change { deas.count }.from(4).to(3)
-        end
+      before do
+        DeaPool.send(:process_advertise_message, dea_expired)
+        DeaPool.send(:process_advertise_message, dea_low_mem)
+        DeaPool.send(:process_advertise_message, dea_buildpack)
+        deas["expired"][:last_update] = Time.new(2011, 04, 11)
       end
 
-      context "when the dea has no runtimes (i.e. is buildpack only)" do
-        before { DeaPool.send(:process_advertise_message, dea_buildpack) }
-
-        it "should find a non-expired dea meeting the needs of the app" do
-          DeaPool.find_dea(1024, "foobar").should == "buildpack"
-          DeaPool.find_dea(1024, "ruby19").should == "buildpack"
-        end
+      it "should find a non-expired dea with enough memory" do
+        DeaPool.find_dea(1024).should == "buildpack"
       end
     end
   end

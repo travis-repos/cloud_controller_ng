@@ -8,7 +8,6 @@ applications:
         mem: 64M
         description: Standalone Application
         exec:
-    runtime: ruby19
     command: bin/cloud_controller -m
     url: ${name}.${target-base}
     mem: 128M

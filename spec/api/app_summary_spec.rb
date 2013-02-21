@@ -86,11 +86,6 @@ module VCAP::CloudController
         decoded_response["framework"]["name"].should == @app.framework.name
       end
 
-      it "should return the app runtime" do
-        decoded_response["runtime"]["guid"].should == @app.runtime.guid
-        decoded_response["runtime"]["name"].should == @app.runtime.name
-      end
-
       it "should contain the running instances" do
         decoded_response["running_instances"].should == @app.instances
       end

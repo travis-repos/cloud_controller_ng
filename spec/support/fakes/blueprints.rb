@@ -90,22 +90,15 @@ module VCAP::CloudController::Models
     service_plan      { ServicePlan.make }
   end
 
-  Runtime.blueprint do
-    name              { Sham.name }
-    description       { Sham.description }
-    internal_info     { {:version => Sham.version} }
-  end
-
   Framework.blueprint do
     name              { Sham.name }
     description       { Sham.description }
-    internal_info     { { :runtimes => [ Runtime.make.name => { :default => true } ] } }
+    internal_info     { {runtimes: ["buildpack"]} }
   end
 
   App.blueprint do
     name              { Sham.name }
     space             { Space.make }
-    runtime           { Runtime.make }
     framework         { Framework.make }
   end
 

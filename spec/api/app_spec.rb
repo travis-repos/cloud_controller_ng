@@ -9,14 +9,13 @@ module VCAP::CloudController
     it_behaves_like "a CloudController API", {
       :path                => "/v2/apps",
       :model               => Models::App,
-      :basic_attributes    => [:name, :space_guid, :runtime_guid, :framework_guid],
-      :required_attributes => [:name, :space_guid, :runtime_guid, :framework_guid],
+      :basic_attributes    => [:name, :space_guid, :framework_guid],
+      :required_attributes => [:name, :space_guid, :framework_guid],
       :unique_attributes   => [:name, :space_guid],
       :queryable_attributes => :name,
       :many_to_one_collection_ids => {
         :space      => lambda { |app| Models::Space.make  },
-        :framework  => lambda { |app| Models::Framework.make },
-        :runtime    => lambda { |app| Models::Runtime.make   }
+        :framework  => lambda { |app| Models::Framework.make }
       },
       :many_to_many_collection_ids => {
         :routes => lambda { |app|
@@ -239,8 +238,7 @@ module VCAP::CloudController
         Yajl::Encoder.encode(
           :name => Sham.name,
           :space_guid => @space_a.guid,
-          :framework_guid => Models::Framework.make.guid,
-          :runtime_guid => Models::Runtime.make.guid)
+          :framework_guid => Models::Framework.make.guid)
       end
 
       let(:update_req_for_a) do
@@ -360,8 +358,7 @@ module VCAP::CloudController
           req = Yajl::Encoder.encode(:name => Sham.name,
                                      :space_guid => space.guid,
                                      :memory => 128,
-                                     :framework_guid => Models::Framework.make.guid,
-                                     :runtime_guid => Models::Runtime.make.guid)
+                                     :framework_guid => Models::Framework.make.guid)
 
           post("/v2/apps", req, headers_for(make_developer_for_space(space)))
 

@@ -21,12 +21,12 @@ module VCAP::CloudController
         end
       end
 
-      def find_dea(mem, runtime)
+      def find_dea(mem)
         mutex.synchronize do
           deas.keys.shuffle.each do |id|
             dea = lookup_dea_unless_expired(id)
             next unless dea
-            return id if dea_meets_needs?(dea, mem, runtime)
+            return id if dea_meets_needs?(dea, mem)
           end
           nil
         end
@@ -57,9 +57,9 @@ module VCAP::CloudController
         dea
       end
 
-      def dea_meets_needs?(dea, mem, runtime)
+      def dea_meets_needs?(dea, mem)
         stats = dea[:advertisement]
-        stats[:available_memory] >= mem && (stats[:runtimes].nil? || stats[:runtimes].member?(runtime))
+        stats[:available_memory] >= mem
       end
 
       MUTEX = Mutex.new

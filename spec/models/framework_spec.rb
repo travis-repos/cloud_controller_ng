@@ -29,7 +29,6 @@ module VCAP::CloudController
         Models::Framework.populate_from_directory(dir)
         sinatra = Models::Framework.find(:name => "sinatra")
         sinatra.internal_info.should_not be_nil
-        sinatra.internal_info["runtimes"].size.should == 3
       end
     end
   end

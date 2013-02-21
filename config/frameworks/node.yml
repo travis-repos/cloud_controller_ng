@@ -1,9 +1,4 @@
 ---
 name: "node"
-runtimes:
-  - node:
-      default: true
-  - node06:
-      default: false
 detection:
   - "*.js": '.'

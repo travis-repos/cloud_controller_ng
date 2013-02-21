@@ -14,7 +14,6 @@ module VCAP::CloudController
       attribute  :name,                String
       attribute  :production,          Message::Boolean,    :default => false
       to_one     :space
-      to_one     :runtime
       to_one     :framework
       attribute  :environment_json,    Hash,       :default => {}
       attribute  :memory,              Integer,    :default => 256
@@ -36,7 +35,7 @@ module VCAP::CloudController
       to_many    :routes
     end
 
-    query_parameters :name, :space_guid, :organization_guid, :framework_guid, :runtime_guid
+    query_parameters :name, :space_guid, :organization_guid, :framework_guid
 
     def self.translate_validation_exception(e, attributes)
       space_and_name_errors = e.errors.on([:space_id, :name])

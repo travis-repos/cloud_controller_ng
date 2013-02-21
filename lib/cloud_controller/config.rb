@@ -46,8 +46,6 @@ class VCAP::CloudController::Config < VCAP::Config
         optional(:staging_manifests) => String,
       },
 
-      optional(:runtimes_file) => String,
-
       :db => {
         :database                   => String,     # db connection string for sequel
         optional(:log_level)        => String,     # debug, info, etc.
@@ -141,7 +139,6 @@ class VCAP::CloudController::Config < VCAP::Config
     config[:directories] ||= {}
     config[:directories][:staging_manifests] ||=
       File.join(config_dir, "frameworks")
-    config[:runtimes_file] ||= File.join(config_dir, "runtimes.yml")
     config
   end
 

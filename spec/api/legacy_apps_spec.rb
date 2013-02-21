@@ -289,17 +289,11 @@ module VCAP::CloudController
 
     describe "POST /apps" do
       before do
-        ["java", "ruby18"].each do |r|
-          unless Models::Runtime[:name => r]
-            Models::Runtime.make(:name => r)
-          end
-        end
-
         Models::Framework.find_or_create(:name => "sinatra") do |fw|
           fw.update(
             :description => "sinatra",
             :internal_info => {
-              :runtimes => [ "ruby18" => { :default => true } ]
+              :runtimes => [ "buildpack" ]
             }
           )
         end
@@ -308,7 +302,7 @@ module VCAP::CloudController
           fw.update(
             :description => "grails",
             :internal_info => {
-              :runtimes => [ "java" => { :default => true } ]
+              :runtimes => [ "buildpack" ]
             }
           )
         end
@@ -321,7 +315,7 @@ module VCAP::CloudController
         before do
           req = Yajl::Encoder.encode({
             :name => app_name,
-            :staging => { :framework => "sinatra", :runtime => "ruby18" },
+            :staging => { :framework => "sinatra", :runtime => "buildpack" },
           })
 
           post "/apps", req, headers_for(user)
@@ -373,7 +367,7 @@ module VCAP::CloudController
         before do
           req = Yajl::Encoder.encode({
             :name => app_name,
-            :staging => { :framework => "funky", :runtime => "ruby18" },
+            :staging => { :framework => "funky", :runtime => "buildpack" },
           })
 
           @num_apps_before = Models::App.count
@@ -389,28 +383,6 @@ module VCAP::CloudController
         end
 
         it_behaves_like "a vcap rest error response", /framework is invalid: funky/
-      end
-
-      context "with an invalid runtime" do
-        before do
-          req = Yajl::Encoder.encode({
-            :name => app_name,
-            :staging => { :framework => "sinatra", :runtime => "cobol" },
-          })
-
-          @num_apps_before = Models::App.count
-          post "/apps", req, headers_for(user)
-        end
-
-        it "should return bad request" do
-          last_response.status.should == 400
-        end
-
-        it "should not add an app" do
-          Models::App.count.should == @num_apps_before
-        end
-
-        it_behaves_like "a vcap rest error response", /runtime is invalid: cobol/
       end
 
       context "with a nil runtime" do
@@ -430,7 +402,6 @@ module VCAP::CloudController
         it "should set a default runtime" do
           app = user.default_space.apps_dataset[:name => app_name]
           app.should_not be_nil
-          app.runtime.name.should == "java"
         end
       end
 
@@ -661,19 +632,6 @@ module VCAP::CloudController
         it "should update the app" do
           app_obj.memory.should == @expected_mem
         end
-      end
-
-      context "with an invalid runtime" do
-        before do
-          req = Yajl::Encoder.encode(:staging => { :runtime => "cobol" })
-          put "/apps/#{app_obj.name}", req, headers_for(user)
-        end
-
-        it "should return bad request" do
-          last_response.status.should == 400
-        end
-
-        it_behaves_like "a vcap rest error response", /runtime is invalid: cobol/
       end
 
       describe "with env" do

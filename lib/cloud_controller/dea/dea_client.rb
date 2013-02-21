@@ -221,7 +221,7 @@ module VCAP::CloudController
 
         indices.each do |idx|
           msg[:index] = idx
-          dea_id = dea_pool.find_dea(app.memory, app.runtime.name)
+          dea_id = dea_pool.find_dea(app.memory)
           if dea_id
             dea_publish("#{dea_id}.start", msg.merge(message_override))
           else
@@ -309,10 +309,6 @@ module VCAP::CloudController
           :droplet => app.guid,
           :name => app.name,
           :uris => app.uris,
-          :runtime => app.runtime.name,
-          :runtime_info => app.runtime.internal_info.merge(
-            :name => app.runtime.name
-          ),
           :framework => app.framework.name,
           :prod => app.production,
           :sha1 => app.droplet_hash,
