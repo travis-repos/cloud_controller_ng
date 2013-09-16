@@ -1,2 +1,2 @@
 script: true
-install: false
+install: /bin/false
