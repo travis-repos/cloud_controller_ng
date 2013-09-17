@@ -1,2 +1,4 @@
 script: true
 install: /bin/false
+notifications:
+  email: team@travis-ci.com
